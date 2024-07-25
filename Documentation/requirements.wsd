@@ -1,0 +1,28 @@
+@startuml
+title UseCases
+left to right direction
+
+actor Voter
+actor central_admin as "Federal Administrator"
+actor node_admin as "Node Administrator"
+
+
+rectangle "Central"{
+    usecase start_stop as "start/stop election"
+    usecase results as "Show federal results"
+    usecase register_node as "(un-)register node"
+    usecase authenticate_voter as "authenticate voter"
+    usecase show_parties as "show parties"
+    usecase redirect_voter as "redirect voter"
+}
+
+
+rectangle "Node"{
+    usecase constituency_results as "Show constituency results"
+    usecase vote
+    usecase show_candidates as "show candidates"
+    usecase show_parties as "show parties"  
+}
+
+
+@enduml
