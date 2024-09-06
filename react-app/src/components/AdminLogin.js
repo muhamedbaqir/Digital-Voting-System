@@ -10,10 +10,10 @@ export default function AdminLogin() {
     <>
       <h1>Admin login</h1>
       <form>
-        <label for="username">Name: </label>
+        <label htmlFor="username">Name: </label>
         <input type="text"></input>
         <br />
-        <label for="password">Password: </label>
+        <label htmlFor="password">Password: </label>
         <input type="password"></input>
         <br />
 

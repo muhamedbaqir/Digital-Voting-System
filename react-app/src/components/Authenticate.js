@@ -19,26 +19,26 @@ export default function Authenticate() {
       <h1>Authenticate</h1>
       <form>
         <div id="personalInfo">
-          <label for="firstName">First Name:</label>
+          <label htmlFor="firstName">First Name:</label>
           <input type="text" id="firstName" />
           <br />
-          <label for="lastName">Last Name:</label>
+          <label htmlFor="lastName">Last Name:</label>
           <input type="text" id="lastName" />
           <br />
 
-          <label for="street"> Street:</label>
+          <label htmlFor="street"> Street:</label>
           <input type="text" id="street" />
           <br />
 
-          <label for="streetNumber">Street Number:</label>
+          <label htmlFor="streetNumber">Street Number:</label>
           <input type="number" id="streetNumber" />
           <br />
 
-          <label for="postalCode">Postal Code:</label>
+          <label htmlFor="postalCode">Postal Code:</label>
           <input type="number" id="postalCode" />
           <br />
 
-          <label for="birthday">Birthday:</label>
+          <label htmlFor="birthday">Birthday:</label>
           <input type="Date" id="birthday" />
 
           <br />
