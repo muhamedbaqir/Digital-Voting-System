@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 
 export default function AdminDashboard() {
-  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [adminLoggedIn, setAdminLoggedIn] = useState(true);
 
   if (!adminLoggedIn) return <Navigate to="/admin/login" />;
 

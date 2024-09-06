@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Authenticate() {
-  // maybe break apart into two pages and transition using session storage
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
