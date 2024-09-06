@@ -44,7 +44,7 @@ export default function Home() {
         <div>
           <h1>the election is still running</h1>
           <li>
-            <Link to="/vote">go vote</Link>
+            <Link to="/authenticate">go vote</Link>
           </li>
         </div>
       ) : (
