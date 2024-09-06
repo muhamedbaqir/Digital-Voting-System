@@ -2,14 +2,14 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import Home from "./components/Home";
-import AuthenticateVoter from "./components/AuthenticateVoter";
+import Vote from "./components/Vote";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/AuthenticateVoter" element={<AuthenticateVoter />} />
+        <Route path="/vote" element={<Vote />} />
       </Routes>
     </Router>
   );
