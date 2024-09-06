@@ -15,7 +15,7 @@ export default function Home() {
   const CHART_COLOR = "#82ca9d";
 
   // need to query backend instead
-  const [electionIsRunning, setElectionIsRunning] = useState(false);
+  const [electionIsRunning, setElectionIsRunning] = useState(true);
 
   const electionResults = [
     {
@@ -44,7 +44,7 @@ export default function Home() {
         <div>
           <h1>the election is still running</h1>
           <li>
-            <Link to="/AuthenticateVoter">go vote</Link>
+            <Link to="/authenticate">go vote</Link>
           </li>
         </div>
       ) : (
