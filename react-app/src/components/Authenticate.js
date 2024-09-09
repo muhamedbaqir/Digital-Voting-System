@@ -17,39 +17,60 @@ export default function Authenticate() {
 
   return (
     <>
-      <h1>Authenticate</h1>
-      <form>
-        <div id="personalInfo">
-          <label for="firstName">First Name:</label>
-          <input type="text" id="firstName" />
-          <br />
-          <label for="lastName">Last Name:</label>
-          <input type="text" id="lastName" />
-          <br />
+      <div className="container center-text mt-5">
+        <h1>Authenticate</h1>
+        <form className="form-control justify-content-center align-items-center">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="firstName">
+              First Name
+            </label>
+            <input className="form-control" type="text" id="firstName" />
+          </div>
 
-          <label for="street"> Street:</label>
-          <input type="text" id="street" />
-          <br />
+          <div className="mb-3">
+            <label className="form-label" htmlFor="lastName">
+              Last Name
+            </label>
+            <input className="form-control" type="text" id="lastName" />
+          </div>
 
-          <label for="streetNumber">Street Number:</label>
-          <input type="number" id="streetNumber" />
-          <br />
+          <div className="mb-3">
+            <label className="form-label" htmlFor="street">
+              Street
+            </label>
+            <input className="form-control" type="text" id="street" />
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="streetNumber">
+              Street Number
+            </label>
+            <input className="form-control" type="number" id="streetNumber" />
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="postalCode">
+              Postal Code
+            </label>
+            <input className="form-control" type="number" id="postalCode" />
+          </div>
 
-          <label for="postalCode">Postal Code:</label>
-          <input type="number" id="postalCode" />
-          <br />
+          <div className="mb-3">
+            <label className="form-label" htmlFor="birthday">
+              Birthday
+            </label>
+            <input className="form-control" type="Date" id="birthday" />
+          </div>
 
-          <label for="birthday">Birthday:</label>
-          <input type="Date" id="birthday" />
-
-          <br />
           <Link to="/vote">
-            <button type="submit" onSubmit={handleSubmit()}>
-              Foo
+            <button
+              className="btn btn-primary"
+              type="submit"
+              onSubmit={handleSubmit()}
+            >
+              Submit
             </button>
           </Link>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   );
 }
