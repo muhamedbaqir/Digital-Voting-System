@@ -6,27 +6,37 @@ export default function Vote() {
 
   return (
     <>
-      <div id="votes">
-        <label for="firstVote">first Vote:</label>
-        <select>
-          {candidates.map((candidate) => (
-            <option value={candidate}>{candidate} </option>
-          ))}
-        </select>
-        <br />
+      <div className="container mt-5">
+        <form>
+          <label className="form-label" for="firstVote">
+            first Vote:
+          </label>
+          <select className="form-select form-select-lg mb-3">
+            {candidates.map((candidate) => (
+              <option value={candidate}>{candidate} </option>
+            ))}
+          </select>
+          <br />
 
-        <label for="secondVote">second Vote:</label>
-        <select>
-          {parties.map((party) => (
-            <option value={party}>{party} </option>
-          ))}
-        </select>
-        <br />
-        <Link to="/success">
-          <button type="submit" onSubmit={() => {}}>
-            Foo
-          </button>
-        </Link>
+          <label className="form-label" for="secondVote">
+            second Vote:
+          </label>
+          <select className="form-select form-select-lg mb-3">
+            {parties.map((party) => (
+              <option value={party}>{party} </option>
+            ))}
+          </select>
+          <br />
+          <Link to="/success">
+            <button
+              className="btn btn-primary"
+              type="submit"
+              onSubmit={() => {}}
+            >
+              Vote
+            </button>
+          </Link>
+        </form>
       </div>
     </>
   );
