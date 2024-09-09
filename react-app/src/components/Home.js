@@ -40,44 +40,91 @@ export default function Home() {
 
   return (
     <>
+      <button onClick={() => setElectionIsRunning(!electionIsRunning)}>
+        Debug: Toggle Election State
+      </button>
+      <br />
+
+      <div class="container text-center mt-5">
+        <h1 class="display-1">
+          <b>German Federal Election</b>
+        </h1>
+      </div>
       {electionIsRunning ? (
-        <div>
-          <h1>the election is still running</h1>
-          <li>
-            <Link to="/authenticate">go vote</Link>
-          </li>
+        <div className="container text-center mt-5">
+          <h1>The election is ongoing</h1>
+
+          <Link to="/authenticate">
+            <button className="btn btn-primary btn-lg mt-5">
+              Cast your vote
+            </button>
+          </Link>
+
+          <div className="container text-start mt-5">
+            <p class="mb-3">
+              In the German federal election, each voter has two votes, which
+              together help shape the government.
+            </p>
+            <p class="mb-3">
+              The first vote (Erststimme) is used to choose a candidate from
+              your local constituency. Germany is divided into 299
+              constituencies, and you vote for the candidate you want to
+              represent your local area in the Bundestag (federal parliament).
+              The candidate with the most votes in each constituency wins a seat
+              in the Bundestag.
+            </p>
+            <p class="mb-3">
+              The second vote (Zweitstimme) is for a political party. This vote
+              determines the overall proportion of seats each party gets in the
+              Bundestag. The seats are allocated based on the percentage of
+              second votes each party receives, influencing which parties form
+              the coalition government and who becomes the Chancellor.
+            </p>
+            <p>
+              Your two votes work together to ensure both local representation
+              and proportional party representation in the German federal
+              government.
+            </p>
+          </div>
         </div>
       ) : (
-        <div id="election-results">
-          <h1>The Election is over</h1>
-          <h2>Election Results</h2>
-          <PieChart width={600} height={600}>
-            <Pie
-              data={electionResults}
-              nameKey="name"
-              dataKey="percentage"
-              cx="50%"
-              cy="50%"
-              outerRadius={200}
-              fill={CHART_COLOR}
-            >
-              {electionResults.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-          </PieChart>
+        <div className="container mt-5">
+          <h1 className="text-center">The elections results are:</h1>
+          <br />
+          <div className="row">
+            <div className="col-6">
+              <h2>Party distribution</h2>
+              <PieChart width={600} height={600}>
+                <Pie
+                  data={electionResults}
+                  nameKey="name"
+                  dataKey="percentage"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={200}
+                  fill={CHART_COLOR}
+                >
+                  {electionResults.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </div>
 
-          <h2>Seat Distribution</h2>
-          <BarChart width={600} height={400} data={electionResults}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Bar dataKey="seats" fill={CHART_COLOR}>
-              {electionResults.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Bar>
-          </BarChart>
+            <div className="col-6">
+              <h2>Seat Distribution</h2>
+              <BarChart width={600} height={400} data={electionResults}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Bar dataKey="seats" fill={CHART_COLOR}>
+                  {electionResults.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </div>
+          </div>
         </div>
       )}
     </>
