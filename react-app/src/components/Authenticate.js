@@ -17,7 +17,7 @@ export default function Authenticate() {
   return (
     <>
       <div className="container center-text mt-5">
-        <h1>Authenticate</h1>
+        <h1 className="text-primary">Authenticate</h1>
         <form className="form-control justify-content-center align-items-center">
           <div className="mb-3">
             <label className="form-label" htmlFor="firstName">
@@ -59,7 +59,7 @@ export default function Authenticate() {
             <input className="form-control" type="Date" id="birthday" />
           </div>
 
-    <Link to="/vote">
+          <Link to="/vote">
             <button
               className="btn btn-primary"
               type="submit"

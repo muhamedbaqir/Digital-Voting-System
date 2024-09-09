@@ -45,14 +45,14 @@ export default function Home() {
       </button>
       <br />
 
-      <div class="container text-center mt-5">
-        <h1 class="display-1">
+      <div className="container text-center mt-5">
+        <h1 className="display-1 text-primary">
           <b>German Federal Election</b>
         </h1>
       </div>
       {electionIsRunning ? (
         <div className="container text-center mt-5">
-          <h1>The election is ongoing</h1>
+          <h1 className="text-secondary">The election is ongoing</h1>
 
           <Link to="/authenticate">
             <button className="btn btn-primary btn-lg mt-5">
@@ -89,7 +89,9 @@ export default function Home() {
         </div>
       ) : (
         <div className="container mt-5">
-          <h1 className="text-center">The elections results are:</h1>
+          <h1 className="text-center text-secondary">
+            The elections results are:
+          </h1>
           <br />
           <div className="row">
             <div className="col-6">
