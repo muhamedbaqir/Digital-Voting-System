@@ -52,9 +52,40 @@ export default function Home() {
       </div>
       {electionIsRunning ? (
         <div className="container text-center mt-5">
-          <h1>
-            <Link to="/authenticate">Votes</Link> are still being cast
-          </h1>
+          <h1>The election is ongoing</h1>
+
+          <Link to="/authenticate">
+            <button className="btn btn-primary btn-lg mt-5">
+              Cast your vote
+            </button>
+          </Link>
+
+          <div className="container text-start mt-5">
+            <p class="mb-3">
+              In the German federal election, each voter has two votes, which
+              together help shape the government.
+            </p>
+            <p class="mb-3">
+              The first vote (Erststimme) is used to choose a candidate from
+              your local constituency. Germany is divided into 299
+              constituencies, and you vote for the candidate you want to
+              represent your local area in the Bundestag (federal parliament).
+              The candidate with the most votes in each constituency wins a seat
+              in the Bundestag.
+            </p>
+            <p class="mb-3">
+              The second vote (Zweitstimme) is for a political party. This vote
+              determines the overall proportion of seats each party gets in the
+              Bundestag. The seats are allocated based on the percentage of
+              second votes each party receives, influencing which parties form
+              the coalition government and who becomes the Chancellor.
+            </p>
+            <p>
+              Your two votes work together to ensure both local representation
+              and proportional party representation in the German federal
+              government.
+            </p>
+          </div>
         </div>
       ) : (
         <div className="container mt-5">
