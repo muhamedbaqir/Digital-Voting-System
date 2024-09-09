@@ -9,20 +9,26 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <h1>Admin dashboard</h1>
-      {electionIsRunning ? (
-        <div>
-          <text>Election is running</text>
-          <br />
-          <button>Stop Election</button>
-        </div>
-      ) : (
-        <div>
-          <text>No election is running</text>
-          <br />
-          <button>Start Election</button>
-        </div>
-      )}
+      <div className="container text-center mt-5">
+        <h1 className="text-primary">Admin dashboard</h1>
+        {electionIsRunning ? (
+          <div>
+            <text>Election is running</text>
+            <br />
+            <button className="btn btn-primary btn-lg mt-2">
+              Stop Election
+            </button>
+          </div>
+        ) : (
+          <div>
+            <text>No election is running</text>
+            <br />
+            <button className="btn btn-primary btn-lg mt-2">
+              Start Election
+            </button>
+          </div>
+        )}
+      </div>
     </>
   );
 }

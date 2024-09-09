@@ -8,19 +8,32 @@ export default function AdminLogin() {
 
   return (
     <>
-      <h1>Admin login</h1>
-      <form>
-        <label htmlFor="username">Name: </label>
-        <input type="text"></input>
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input type="password"></input>
-        <br />
+      <div className="container mt-5 text-start">
+        <h1>Admin login</h1>
+        <form className="form-control justify-content-center align-items-center">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="username">
+              Name:
+            </label>
+            <input className="form-control" type="text"></input>
+          </div>
 
-        <button type="submit" onClick={handleSubmit}>
-          Login
-        </button>
-      </form>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="password">
+              Password:
+            </label>
+            <input className="form-control" type="password"></input>
+
+            <button
+              className="btn btn-primary btn-lg mt-3"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
