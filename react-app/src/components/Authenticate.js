@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Authenticate() {
-  // maybe break apart into two pages and transition using session storage
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -60,7 +59,7 @@ export default function Authenticate() {
             <input className="form-control" type="Date" id="birthday" />
           </div>
 
-          <Link to="/vote">
+    <Link to="/vote">
             <button
               className="btn btn-primary"
               type="submit"
