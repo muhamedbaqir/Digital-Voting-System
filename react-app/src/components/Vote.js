@@ -7,6 +7,10 @@ export default function Vote() {
   return (
     <>
       <div className="container mt-5">
+        <h1 className=" text-primary">
+          <b>Vote</b>
+        </h1>
+
         <form>
           <label className="form-label" for="firstVote">
             first Vote:
@@ -16,8 +20,6 @@ export default function Vote() {
               <option value={candidate}>{candidate} </option>
             ))}
           </select>
-          <br />
-
           <label className="form-label" for="secondVote">
             second Vote:
           </label>
@@ -29,7 +31,7 @@ export default function Vote() {
           <br />
           <Link to="/success">
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-lg"
               type="submit"
               onSubmit={() => {}}
             >
