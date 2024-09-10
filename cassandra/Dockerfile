@@ -1,3 +1,6 @@
 FROM cassandra:4.0
-
-COPY init.cql /docker-entrypoint-initdb.d/
+ENV LANG C.UTF-8
+COPY *.cql /docker-entrypoint-initdb.d/
+COPY entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["cassandra", "-f"]
