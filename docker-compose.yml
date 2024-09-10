@@ -2,7 +2,7 @@ version: "3.8"
 services:
   cassandra:
     image: cassandra:4.0
-    container_name: cassandra
+    container_name: dvscassandra
     build: 
       context: ./cassandra
       dockerfile: Dockerfile
@@ -29,8 +29,6 @@ services:
       SERVER_HOST: ${SERVER_HOST_1}
       SERVER_PORT: ${SERVER_PORT_1}
       CASSANDRA_HOST: cassandra
-    ports:
-      - ${SERVER_PORT_1}:8000
     volumes:
       - ./backend:/backend
   fastapi_app2:
@@ -46,8 +44,6 @@ services:
       SERVER_HOST: ${SERVER_HOST_2}
       SERVER_PORT: ${SERVER_PORT_2}
       CASSANDRA_HOST: cassandra
-    ports:
-      - ${SERVER_PORT_2}:8000
     volumes:
       - ./backend:/backend
   fastapi_app3:
@@ -63,13 +59,12 @@ services:
       SERVER_HOST: ${SERVER_HOST_3}
       SERVER_PORT: ${SERVER_PORT_3}
       CASSANDRA_HOST: cassandra
-    ports:
-      - ${SERVER_PORT_3}:8000
     volumes:
       - ./backend:/backend
 
   nginx:
     image: nginx
+    container_name: dvsnginx
     restart: always
     env_file: .env
     ports:

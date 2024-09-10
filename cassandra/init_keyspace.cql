@@ -4,6 +4,13 @@ WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
 USE elections;
 
+CREATE TABLE IF NOT EXISTS admins (
+    admin_id UUID PRIMARY KEY,
+    username text,
+    password_hash text,
+    created_at timestamp
+);
+
 CREATE TABLE IF NOT EXISTS voters (
     voter_id UUID PRIMARY KEY,
     name text,
