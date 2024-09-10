@@ -1,0 +1,15 @@
+@startuml
+
+frame central {
+    component "central frontend"
+    component "central backend"
+    database "central db"
+}
+
+frame node {
+    component "node frontend"
+    component "node backend"
+    database "node db"
+}
+
+@enduml

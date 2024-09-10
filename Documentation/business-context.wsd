@@ -1,0 +1,20 @@
+@startuml
+title Business Context
+left to right direction
+skinparam actorStyle awesome
+
+actor Voter
+actor Adminstrators as admin
+
+rectangle "Digital Voting System" as dvs{
+
+}
+Voter --> dvs : vote
+Voter --> dvs : personal authentication data
+Voter <-- dvs: election results
+
+dvs <-- admin : Configuration 
+
+
+
+@enduml
