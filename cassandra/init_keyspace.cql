@@ -1,6 +1,9 @@
 -- init.cql
+
 CREATE KEYSPACE IF NOT EXISTS elections
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+ALTER USER cassandra with PASSWORD 'xxxxxxxxx';
 
 USE elections;
 
@@ -10,6 +13,8 @@ CREATE TABLE IF NOT EXISTS admins (
     password_hash text,
     created_at timestamp
 );
+
+CREATE INDEX ON admins(username);
 
 CREATE TABLE IF NOT EXISTS voters (
     voter_id UUID PRIMARY KEY,

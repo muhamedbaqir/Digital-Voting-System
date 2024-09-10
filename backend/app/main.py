@@ -25,8 +25,7 @@ def read_home():
 def get_data():
     rows = session.execute("SELECT * FROM voters")
     return {"data": [row for row in rows]}
-'''
-@app.post("/login")
-def login(user: OAuth2PasswordRequestForm = Depends()):
-    return login(sessin,user)
-    '''
+
+@app.get("/health")
+def read_health():
+    return {"status": "healthy"}
