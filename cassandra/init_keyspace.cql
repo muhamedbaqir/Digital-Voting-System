@@ -3,8 +3,6 @@
 CREATE KEYSPACE IF NOT EXISTS elections
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
-ALTER USER cassandra with PASSWORD 'xxxxxxxxx';
-
 USE elections;
 
 CREATE TABLE IF NOT EXISTS admins (
