@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
 
-COPY ./start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+COPY ./start.sh /code/start.sh
 
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+RUN chmod +x /code/start.sh
+
+ENTRYPOINT ["/code/start.sh"]
