@@ -8,6 +8,7 @@ import Success from "./components/Success";
 import Admin from "./components/Admin";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminLogin from "./components/AdminLogin";
+import TestingPage from "./components/TestingPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/admin/" element={<Admin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/test" element={<TestingPage />} />
       </Routes>
     </Router>
   );
