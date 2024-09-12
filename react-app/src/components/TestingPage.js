@@ -5,13 +5,13 @@ export default function TestingPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch("http://localhost:9999/health")
+      fetch(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/health`)
         .then((res) => {
           if (!res.ok) throw new Error("failed to fetch data");
           return res.json();
         })
         .then((data) => console.log(data));
-    }, 5000);
+    }, 500);
   });
 
   return <>test</>;

@@ -13,7 +13,7 @@ EXPOSE 3000
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm install --silent
+RUN npm install --silent --save-dev dotenv 
 RUN npm install react-scripts@3.4.1 -g --silent
 
 # add app
