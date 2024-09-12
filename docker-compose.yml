@@ -6,15 +6,22 @@ services:
       - "MAX_HEAP_SIZE=256M"
       - "HEAP_NEWSIZE=128M"
       - "CASSANDRA_CLUSTER_NAME=DVS"
-      - CASSANDRA_AUTHENTICATOR=PasswordAuthenticator              
-      - CASSANDRA_USER=cassandra     
-      - CASSANDRA_PASSWORD_SEEDER=yes         
+      - CASSANDRA_AUTHENTICATOR=PasswordAuthenticator
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_PASSWORD=password
     restart: always
     volumes:
       - ./out/cassandra_data:/var/lib/cassandra
     healthcheck:
-      test: ["CMD", "cqlsh", "-u cassandra", "-p cassandra", "-e describe keyspaces"]
+      test:
+        [
+          "CMD",
+          "cqlsh",
+          "-u cassandra",
+          "-p cassandra",
+          "-e describe keyspaces",
+        ]
       interval: 15s
       timeout: 10s
       retries: 10
@@ -35,7 +42,7 @@ services:
 
   fastapi_app1:
     image: fastapi_app1
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
@@ -53,7 +60,7 @@ services:
 
   fastapi_app2:
     image: fastapi_app2
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
@@ -71,7 +78,7 @@ services:
 
   fastapi_app3:
     image: fastapi_app3
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
@@ -84,6 +91,18 @@ services:
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
+    networks:
+      - dvsnetwork
+
+  react:
+    image: react-app
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    container_name: dvsreact
+    restart: always
+    ports:
+      - 3000:3000
     networks:
       - dvsnetwork
 
