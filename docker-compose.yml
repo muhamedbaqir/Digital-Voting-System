@@ -102,7 +102,7 @@ services:
     container_name: dvsreact
     restart: always
     ports:
-      - 3000:3000
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
       - dvsnetwork
 
