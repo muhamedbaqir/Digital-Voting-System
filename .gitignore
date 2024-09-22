@@ -2,3 +2,7 @@
 .env
 __pycache__/
 out/
+*.aux
+*.log
+*.pdf
+*.toc
