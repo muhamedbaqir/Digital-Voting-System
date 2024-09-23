@@ -34,7 +34,7 @@ Die Anforderungen an eine Lösung und die Herausforderungen einer möglichen ver
     \item Ausfallsicherheit: Genauso wie man nicht alles auf eine Karte setzen sollte, ist es umso weniger sinnvoll kritische Anwendungen von einem physikalischem Computer abhängig zu machen. Computersysteme können und werden aus den beliebigsten Gründen ausfallen.
 \end{itemize} 
 
-Hier ist es sinnvoll anzumerken, dass die Architektur nicht willkürlich alle möglichen Ziele erfüllen kann, sondern sich nach dem zugrunde liegenden Problem richten sollte. In einem ERP-System hat die Latenz beispielsweise nicht den selben Stellenwert wie in einem autonomen Fahrsystem. \\
+Es ist wichtig zu erkennen, dass die Architektur nicht willkürlich alle möglichen Ziele erfüllen kann, sondern sich nach dem zugrunde liegenden Problem richten sollte. In einem ERP-System hat die Latenz beispielsweise nicht den selben Stellenwert wie in einem autonomen Fahrsystem. \\
 Es bedarf also immer einer gründlichen Analyse der Anforderungen, um die Architektur sinnvoll umsetzen zu können. \\
 
 
@@ -58,14 +58,19 @@ Aus dem Ablauf der Wahl kristallisieren die wichtigsten Anforderungen: \\
     \item Datenintegrität: Da ein Wähler nicht mehrmals wählen darf, kann die Datenstruktur nicht nach Wahlkreis, Partei oder Kandidaten partitioniert sein, da dies bei vielen Schreiboperationen die Leistung drastisch reduzieren würde. Wären die Daten partitioniert, müsste man bei jeder Schreiboperation jede Partition abfragen, ob der vorliegende Eintrag gültig ist oder nicht.
 
     \item Ausfallsicherheit: Wie anfangs festgelegt, muss das System ausfallsicher sein und keinen einzigen Ausfallpunkt besitzen dürfen. Die Wählerstimmen dürfen also nicht an einem einzigen Ort gespeichert sein, und es darf nicht über eine einzige Instanz mit den Daten interagiert werden.
+ 
 \end{itemize} 
 
 Wir fassen also zusammen, dass wir eine verteilte Datenbank brauchen, welche schnelle Schreibgeschwindigkeiten unterstützt und die Daten nicht partitioniert werden. \\
-Desweiteren brauchen wir mehrere Backend Intanzen, welcher mit der verteilten Datenbank interagieren.
+Desweiteren brauchen wir mehrere Backend Intanzen, welche mit der verteilten Datenbank interagieren. \\
 
 Im folgenden Kapitel wird die daraus entstehende Architektur näher beleuchtet.
 
+\newpage
 \section{Architektur}
+
+
+
 \newpage
 \section{Implementation}
 \newpage
