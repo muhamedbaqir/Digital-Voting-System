@@ -25,8 +25,6 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
-    networks:
-      - dvsnetwork
 
   cassandra-load-keyspace:
     container_name: cassandra-load-keyspace
@@ -37,8 +35,6 @@ services:
     volumes:
       - ./cassandra/init_keyspace.cql:/init_keyspace.cql
     command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /init_keyspace.cql"
-    networks:
-      - dvsnetwork
 
   fastapi_app:
     image: fastapi_app
@@ -54,8 +50,6 @@ services:
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
-    networks:
-      - dvsnetwork
 
   react:
     image: react-app
@@ -66,8 +60,6 @@ services:
     restart: always
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
-    networks:
-      - dvsnetwork
 
   nginx:
     image: nginx
@@ -78,9 +70,3 @@ services:
       - ${NGINX_PORT}:${NGINX_PORT}
     volumes:
       - "./nginx/default.conf.template:/etc/nginx/templates/default.conf.template"
-    networks:
-      - dvsnetwork
-
-networks:
-  dvsnetwork:
-    driver: bridge
