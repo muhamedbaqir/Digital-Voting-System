@@ -50,6 +50,8 @@ services:
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
+    expose:
+      - 8000
 
   react:
     image: react-app
