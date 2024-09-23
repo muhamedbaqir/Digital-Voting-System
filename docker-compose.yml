@@ -40,54 +40,17 @@ services:
     networks:
       - dvsnetwork
 
-  fastapi_app1:
-    image: fastapi_app1
+  fastapi_app:
+    image: fastapi_app
     build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
       cassandra:
         condition: service_healthy
-    container_name: ${SERVER_HOST_1}
     restart: always
     environment:
       SERVER_PORT: ${SERVER_PORT_1}
-      CASSANDRA_HOST: cassandra
-    volumes:
-      - ./backend:/backend
-    networks:
-      - dvsnetwork
-
-  fastapi_app2:
-    image: fastapi_app2
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      cassandra:
-        condition: service_healthy
-    container_name: ${SERVER_HOST_2}
-    restart: always
-    environment:
-      SERVER_PORT: ${SERVER_PORT_2}
-      CASSANDRA_HOST: cassandra
-    volumes:
-      - ./backend:/backend
-    networks:
-      - dvsnetwork
-
-  fastapi_app3:
-    image: fastapi_app3
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      cassandra:
-        condition: service_healthy
-    container_name: ${SERVER_HOST_3}
-    restart: always
-    environment:
-      SERVER_PORT: ${SERVER_PORT_3}
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
@@ -115,10 +78,6 @@ services:
       - ${NGINX_PORT}:${NGINX_PORT}
     volumes:
       - "./nginx/default.conf.template:/etc/nginx/templates/default.conf.template"
-    depends_on:
-      - fastapi_app1
-      - fastapi_app2
-      - fastapi_app3
     networks:
       - dvsnetwork
 
