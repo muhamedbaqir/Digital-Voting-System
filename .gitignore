@@ -1,3 +1,10 @@
 /node_modules
 .env
-__pycache__
+__pycache__/
+out/
+Documentation/
+react-app/
+*.aux
+*.log
+*.pdf
+*.toc

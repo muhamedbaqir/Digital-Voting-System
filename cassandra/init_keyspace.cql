@@ -11,20 +11,20 @@ CREATE TABLE IF NOT EXISTS admins (
     created_at timestamp
 );
 
+CREATE INDEX IF NOT EXISTS ON admins(username);
+
 CREATE TABLE IF NOT EXISTS voters (
     voter_id UUID PRIMARY KEY,
     name text,
     address text,
-    birth_date date,
-    registered_date timestamp
+    birth_date date
 );
 
 CREATE TABLE IF NOT EXISTS candidates (
     candidate_id UUID PRIMARY KEY,
     name text,
-    party text,
-    position text,
-    campaign_slogan text
+    constituency_party_id UUID,
+    constituency_id UUID
 );
 
 CREATE TABLE IF NOT EXISTS constituencies (
@@ -34,11 +34,14 @@ CREATE TABLE IF NOT EXISTS constituencies (
     population int
 );
 
-CREATE TABLE IF NOT EXISTS elections (
-    election_id UUID PRIMARY KEY,
-    name text,
-    date date,
-    constituency_id UUID
+CREATE TABLE IF NOT EXISTS constituency_parties (
+    constituency_party_id UUID PRIMARY KEY,
+    name text
+);
+
+CREATE TABLE IF NOT EXISTS parties (
+    party_id UUID PRIMARY KEY,
+    name text
 );
 
 CREATE TABLE IF NOT EXISTS votes (
@@ -46,5 +49,5 @@ CREATE TABLE IF NOT EXISTS votes (
     election_id UUID,
     candidate_id UUID,
     voter_id UUID,
-    timestamp timestamp
+    party_id UUID
 );
