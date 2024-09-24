@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PrevNextButtonBar from "../../components/PrevNextButtonBar";
 
 export default function AddConstituencies() {
   const navigate = useNavigate();
@@ -6,20 +7,18 @@ export default function AddConstituencies() {
   return (
     <>
       AddConstituencies
-      <button
-        className="btn btn-primary btn-lg mt-3"
-        type="submit"
-        onClick={() => navigate("/admin/dashboard")}
-      >
-        Abort
-      </button>
-      <button
-        className="btn btn-primary btn-lg mt-3"
-        type="submit"
-        onClick={() => navigate("/admin/AddConstituencyParties")}
-      >
-        Next
-      </button>
+      <div className="fixed-bottom">
+        {PrevNextButtonBar(
+          () => {
+            navigate("/admin/dashboard");
+          },
+          () => {
+            navigate("/admin/AddConstituencyParties");
+          },
+          "Abort",
+          "Next"
+        )}
+      </div>
     </>
   );
 }
