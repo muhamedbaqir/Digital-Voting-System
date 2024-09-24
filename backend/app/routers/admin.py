@@ -7,12 +7,15 @@ from datetime import datetime, timedelta
 from jose import jwt
 from typing import Union
 from uuid import uuid4
-import os
 
 router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="login")
+
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -27,7 +30,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, os.getenv("SECRET_KEY"), algorithm=os.getenv("ALGORITHM"))
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 @router.post("/register/")
@@ -49,7 +52,7 @@ def login(admin: OAuth2PasswordRequestForm = Depends()):
     if result is None or not verify_password(admin.password, result.password_hash):
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
-    access_token_expires = timedelta(minutes=os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"username": result.username}, expires_delta=access_token_expires
     )
