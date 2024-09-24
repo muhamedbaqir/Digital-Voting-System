@@ -10,6 +10,12 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminLogin from "./components/AdminLogin";
 import TestingPage from "./components/TestingPage";
 
+import AddConstituencies from "./components/StartElection/AddConstituencies";
+import AddConstituencyCandidates from "./components/StartElection/AddConstituencyCandidates";
+import AddConstituencyParties from "./components/StartElection/AddConstituencyParties";
+import AddFederalParties from "./components/StartElection/AddFederalParties";
+import ConfirmElectionStart from "./components/StartElection/ConfirmElectionStart";
+
 function App() {
   return (
     <Router>
@@ -22,6 +28,27 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/test" element={<TestingPage />} />
+
+        <Route
+          path="/admin/AddConstituencies"
+          element={<AddConstituencies />}
+        />
+        <Route
+          path="/admin/AddConstituencyCandidates"
+          element={<AddConstituencyCandidates />}
+        />
+        <Route
+          path="/admin/AddConstituencyParties"
+          element={<AddConstituencyParties />}
+        />
+        <Route
+          path="/admin/AddFederalParties"
+          element={<AddFederalParties />}
+        />
+        <Route
+          path="/admin/ConfirmElectionStart"
+          element={<ConfirmElectionStart />}
+        />
       </Routes>
     </Router>
   );
