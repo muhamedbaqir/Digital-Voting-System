@@ -46,12 +46,12 @@ services:
         condition: service_healthy
     restart: always
     environment:
-      SERVER_PORT: ${SERVER_PORT_1}
+      SERVER_PORT: ${SERVER_PORT}
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
     expose:
-      - 8000
+      - ${SERVER_PORT}
 
   react:
     image: react-app

@@ -1,5 +1,5 @@
     upstream fastapiservers {
-        server fastapi_app:8000;
+        server fastapi_app:${SERVER_PORT};
     }
     
     server {
