@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const electionRunningPage = (navigate) => {
+const electionRunningPage = () => {
   return (
     <div>
       <h1 className="text-primary">Election is running</h1>
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
       <div className="container text-center mt-5">
         <h1 className="text-primary">Admin dashboard</h1>
         {electionIsRunning
-          ? electionRunningPage(navigate)
+          ? electionRunningPage()
           : noElectionRunningPage(navigate)}
       </div>
     </>
