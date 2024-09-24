@@ -25,8 +25,6 @@ services:
       interval: 15s
       timeout: 10s
       retries: 10
-    networks:
-      - dvsnetwork
 
   cassandra-load-keyspace:
     container_name: cassandra-load-keyspace
@@ -37,62 +35,23 @@ services:
     volumes:
       - ./cassandra/init_keyspace.cql:/init_keyspace.cql
     command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /init_keyspace.cql"
-    networks:
-      - dvsnetwork
 
-  fastapi_app1:
-    image: fastapi_app1
+  fastapi_app:
+    image: fastapi_app
     build:
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
       cassandra:
         condition: service_healthy
-    container_name: ${SERVER_HOST_1}
     restart: always
     environment:
-      SERVER_PORT: ${SERVER_PORT_1}
+      SERVER_PORT: ${SERVER_PORT}
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
-    networks:
-      - dvsnetwork
-
-  fastapi_app2:
-    image: fastapi_app2
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      cassandra:
-        condition: service_healthy
-    container_name: ${SERVER_HOST_2}
-    restart: always
-    environment:
-      SERVER_PORT: ${SERVER_PORT_2}
-      CASSANDRA_HOST: cassandra
-    volumes:
-      - ./backend:/backend
-    networks:
-      - dvsnetwork
-
-  fastapi_app3:
-    image: fastapi_app3
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      cassandra:
-        condition: service_healthy
-    container_name: ${SERVER_HOST_3}
-    restart: always
-    environment:
-      SERVER_PORT: ${SERVER_PORT_3}
-      CASSANDRA_HOST: cassandra
-    volumes:
-      - ./backend:/backend
-    networks:
-      - dvsnetwork
+    expose:
+      - ${SERVER_PORT}
 
   react:
     image: react-app
@@ -103,8 +62,6 @@ services:
     restart: always
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
-    networks:
-      - dvsnetwork
 
   nginx:
     image: nginx
@@ -115,13 +72,3 @@ services:
       - ${NGINX_PORT}:${NGINX_PORT}
     volumes:
       - "./nginx/default.conf.template:/etc/nginx/templates/default.conf.template"
-    depends_on:
-      - fastapi_app1
-      - fastapi_app2
-      - fastapi_app3
-    networks:
-      - dvsnetwork
-
-networks:
-  dvsnetwork:
-    driver: bridge
