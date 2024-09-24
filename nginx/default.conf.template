@@ -1,0 +1,17 @@
+    upstream fastapiservers {
+        server ${SERVER_HOST_1}:${SERVER_PORT_1};
+        server ${SERVER_HOST_2}:${SERVER_PORT_2};
+        server ${SERVER_HOST_3}:${SERVER_PORT_3};
+    }
+    
+    server {
+        listen ${NGINX_PORT};
+        location / {
+            add_header Access-Control-Allow-Origin *;
+            proxy_set_header Host $host;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+            proxy_pass http://fastapiservers;
+            proxy_http_version 1.1;
+        }
+    }
