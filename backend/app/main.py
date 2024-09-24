@@ -1,5 +1,4 @@
-from fastapi import FastAPI, Depends
-from app.database import session
+from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.routers.candidates import router as candidates_router
 from app.routers.constituencies import router as constituencies_router
