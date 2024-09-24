@@ -4,33 +4,34 @@ from datetime import date, datetime
 from typing import Optional
 
 class Candidate(BaseModel):
-    candidate_id: UUID
+    candidate_id: Optional[UUID] = None
     name: str
-    party: str
-    position: str
-    campaign_slogan: str
+    constituency_party_id: UUID
+    constituency_id: UUID
+
+class Party(BaseModel):
+    party_id: Optional[UUID] = None
+    name: str
 
 class Constituency(BaseModel):
+    constituency_id: Optional[UUID] = None
     name: str
     region: str
     population: int
 
-class Election(BaseModel):
-    election_id: UUID
+class Constituency_Party(BaseModel):
+    constituency_party_id: Optional[UUID] = None
     name: str
-    date: datetime
-    is_running: bool
-    results: Optional[dict] = None
 
 class Voter(BaseModel):
+    voter_id: Optional[UUID] = None
     name: str
     address: str
     birth_date: date
     registered_date: datetime
 
 class Vote(BaseModel):
-    vote_id: UUID
-    election_id: UUID
+    vote_id: Optional[UUID] = None
+    party_id: UUID
     candidate_id: UUID
-    voter_id: UUID
-    timestamp: str
+    voter_hash: str
