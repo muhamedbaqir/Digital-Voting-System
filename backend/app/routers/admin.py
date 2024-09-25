@@ -8,7 +8,7 @@ from jose import jwt
 from typing import Union
 from uuid import uuid4
 
-router = APIRouter()
+router = APIRouter(tags=["Admin"])
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="login")
@@ -33,18 +33,18 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-@router.post("/register/")
+@router.post("/register/", description="Register a new admin by providing a username and password. The password is securely hashed before being stored. Returns a success message upon successful creation.")
 def register_admin(admin: OAuth2PasswordRequestForm = Depends()):
     admin_id = uuid4()
     password_hash = get_password_hash(admin.password)
     query = SimpleStatement("""
-        INSERT INTO admins (admin_id, username, password_hash, created_at)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO admins (admin_id, username, password_hash)
+        VALUES (%s, %s, %s)
     """)
     session.execute(query, (admin_id, admin.username, password_hash, datetime.utcnow()))
     return {"message": "Admin created successfully"}
 
-@router.post("/login/")
+@router.post("/login/", description="Authenticate an admin by verifying their username and password. Returns an access token if the credentials are valid, otherwise raises an error for invalid credentials.")
 def login(admin: OAuth2PasswordRequestForm = Depends()):
     query = SimpleStatement("SELECT * FROM admins WHERE username = %s")
     result = session.execute(query, (admin.username,)).one()
@@ -58,3 +58,4 @@ def login(admin: OAuth2PasswordRequestForm = Depends()):
     )
     
     return {"access_token": access_token, "token_type": "bearer"}
+
