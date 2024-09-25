@@ -51,15 +51,15 @@ export default function AddConstituencyCandidates() {
     {
       constituency: "berlin",
       candidates: [
-        new Candidate("tom", "tomson", "afd"),
-        new Candidate("lisa", "lison", "csu"),
+        new Candidate("tom", "schmitz", "afd"),
+        new Candidate("lisa", "friede", "csu"),
       ],
     },
     {
       constituency: "münchen",
       candidates: [
-        new Candidate("timmy", "foo", "haha"),
-        new Candidate("a", "f", "d"),
+        new Candidate("Anton", "Maier", "spd"),
+        new Candidate("Luisa", "Mair", "csu"),
       ],
     },
     ,
