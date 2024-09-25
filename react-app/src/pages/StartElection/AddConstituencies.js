@@ -7,6 +7,14 @@ export default function AddConstituencies() {
   const [constituencies, setConstituencies] = useState([]);
   const [searchResult, setSearchResult] = useState("");
 
+  useEffect(() => {
+    let url = "http://localhost:9999/";
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (constituencies.includes(searchResult) || searchResult == "") {
