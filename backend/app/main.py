@@ -7,8 +7,17 @@ from app.routers.parties import router as parties_router
 from app.routers.voters import router as voters_router
 from app.routers.votes import router as votes_router
 from app.routers.admin import router as admin_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(candidates_router, prefix="/candidates")
 app.include_router(constituencies_router, prefix="/constituencies")
 app.include_router(constituency_parties_router, prefix="/constituency_parties")

@@ -7,7 +7,6 @@ class Candidate(BaseModel):
     candidate_id: Optional[UUID] = None
     name: str
     constituency_party_id: UUID
-    constituency_id: UUID
 
 class Party(BaseModel):
     party_id: Optional[UUID] = None
@@ -16,11 +15,10 @@ class Party(BaseModel):
 class Constituency(BaseModel):
     constituency_id: Optional[UUID] = None
     name: str
-    region: str
-    population: int
 
 class Constituency_Party(BaseModel):
     constituency_party_id: Optional[UUID] = None
+    constituency_id: UUID
     name: str
 
 class Voter(BaseModel):
