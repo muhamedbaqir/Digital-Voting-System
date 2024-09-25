@@ -2,8 +2,6 @@
 .env
 __pycache__/
 out/
-Documentation/
-react-app/
 *.aux
 *.log
 *.pdf

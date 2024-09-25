@@ -1,14 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from app.basemodels import Constituency
 from app.database import session
 from cassandra.query import SimpleStatement
 from uuid import UUID, uuid4
-from app.checkadmin import check_admin_permissions
 
 router = APIRouter(tags=["Constituencies"])
 
 @router.post("/", response_model=UUID, description="Creates a new constituency and returns its unique ID.")
-def create_constituency(constituency: Constituency, current_user: str = Depends(check_admin_permissions)):
+def create_constituency(constituency: Constituency):
     constituency_id = uuid4()
     query = SimpleStatement("""
         INSERT INTO constituencies (constituency_id, name)
@@ -26,23 +25,24 @@ def get_constituency(constituency_id: UUID):
         raise HTTPException(status_code=404, detail="Constituency not found")
     
     return Constituency(
-        constituency_id = constituency_id,
-        name=result.name
+        name=result.name,
+        region=result.region,
+        population=result.population
     )
 
 @router.put("/{constituency_id}", response_model=Constituency, description="Updates a constituency's details and returns the updated constituency.")
-def update_constituency(constituency_id: UUID, constituency: Constituency, current_user: str = Depends(check_admin_permissions)):
+def update_constituency(constituency_id: UUID, constituency: Constituency):
     query = SimpleStatement("""
         UPDATE constituencies
         SET name = %s
         WHERE constituency_id = %s
     """)
-    session.execute(query, (constituency.name, constituency_id))
+    session.execute(query, (constituency.name))
     
     return constituency
 
 @router.delete("/{constituency_id}", description="Deletes a constituency by its unique ID.")
-def delete_constituency(constituency_id: UUID, current_user: str = Depends(check_admin_permissions)):
+def delete_constituency(constituency_id: UUID):
     query = SimpleStatement("DELETE FROM constituencies WHERE constituency_id = %s")
     session.execute(query, (constituency_id,))
     return {"message": "Constituency deleted successfully"}

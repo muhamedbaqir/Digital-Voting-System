@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from uuid import UUID, uuid4
 from typing import List, Dict
 from app.database import session
 from app.basemodels import Vote
-from app.checkadmin import check_admin_permissions
 
 router = APIRouter(tags=["Votes"])
 
@@ -24,7 +23,7 @@ async def create_vote(vote: Vote):
     )
 
 @router.get("/party-vote-counts", response_model=Dict[UUID, int], description="Retrieves the count of votes for each party.")
-async def get_party_vote_counts(current_user: str = Depends(check_admin_permissions)):
+async def get_party_vote_counts():
     query = "SELECT party_id FROM votes"
     rows = session.execute(query)
     party_vote_counts = {}
@@ -37,7 +36,7 @@ async def get_party_vote_counts(current_user: str = Depends(check_admin_permissi
     return party_vote_counts
 
 @router.get("/candidate-vote-counts", response_model=Dict[UUID, int], description="Retrieves the count of votes for each candidate.")
-async def get_candidate_vote_counts(current_user: str = Depends(check_admin_permissions)):
+async def get_candidate_vote_counts():
     query = "SELECT candidate_id FROM votes"
     rows = session.execute(query)
     candidate_vote_counts = {}
@@ -58,7 +57,7 @@ async def read_vote(vote_id: UUID):
     return Vote(**row._asdict())
 
 @router.put("/{vote_id}", response_model=Vote, description="Updates a vote's details and returns the updated vote.")
-async def update_vote(vote_id: UUID, vote: Vote, current_user: str = Depends(check_admin_permissions)):
+async def update_vote(vote_id: UUID, vote: Vote):
     query = """
     UPDATE votes
     SET party_id=%s, candidate_id=%s, voter_hash=%s 
@@ -73,7 +72,7 @@ async def update_vote(vote_id: UUID, vote: Vote, current_user: str = Depends(che
     )
 
 @router.delete("/{vote_id}", response_model=Vote, description="Deletes a vote by its unique ID.")
-async def delete_vote(vote_id: UUID, current_user: str = Depends(check_admin_permissions)):
+async def delete_vote(vote_id: UUID):
     query = "SELECT * FROM votes WHERE vote_id=%s"
     row = session.execute(query, (vote_id,)).one()
     if row is None:

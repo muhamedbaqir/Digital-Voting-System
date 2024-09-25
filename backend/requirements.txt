@@ -1,7 +1,6 @@
 fastapi[standard]
 pydantic>=1.8.0,<2.0.0
 uvicorn[standard]
-PyJWT
 jose==1.0.0
 python_jose==3.3.0
 passlib==1.7.4
