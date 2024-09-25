@@ -15,8 +15,7 @@ CREATE INDEX IF NOT EXISTS ON admins(username);
 CREATE TABLE IF NOT EXISTS candidates (
     candidate_id UUID PRIMARY KEY,
     name text,
-    constituency_party_id UUID,
-    constituency_id UUID
+    constituency_party_id UUID
 );
 
 CREATE TABLE IF NOT EXISTS constituencies (
@@ -28,6 +27,7 @@ CREATE TABLE IF NOT EXISTS constituencies (
 
 CREATE TABLE IF NOT EXISTS constituency_parties (
     constituency_party_id UUID PRIMARY KEY,
+    constituency_id UUID,
     name text
 );
 

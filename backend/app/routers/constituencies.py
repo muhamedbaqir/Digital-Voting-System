@@ -10,10 +10,10 @@ router = APIRouter(tags=["Constituencies"])
 def create_constituency(constituency: Constituency):
     constituency_id = uuid4()
     query = SimpleStatement("""
-        INSERT INTO constituencies (constituency_id, name, region, population)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO constituencies (constituency_id, name)
+        VALUES (%s, %s)
     """)
-    session.execute(query, (constituency_id, constituency.name, constituency.region, constituency.population))
+    session.execute(query, (constituency_id, constituency.name))
     return constituency_id
 
 @router.get("/{constituency_id}", response_model=Constituency, description="Retrieves a constituency by its unique ID.")
@@ -34,10 +34,10 @@ def get_constituency(constituency_id: UUID):
 def update_constituency(constituency_id: UUID, constituency: Constituency):
     query = SimpleStatement("""
         UPDATE constituencies
-        SET name = %s, region = %s, population = %s
+        SET name = %s
         WHERE constituency_id = %s
     """)
-    session.execute(query, (constituency.name, constituency.region, constituency.population, constituency_id))
+    session.execute(query, (constituency.name))
     
     return constituency
 
@@ -56,9 +56,7 @@ def get_all_constituencies():
     for row in result:
         constituencies.append({
             "constituency_id": row.constituency_id,
-            "name": row.name,
-            "region": row.region,
-            "population": row.population
+            "name": row.name
         })
     
     return constituencies
