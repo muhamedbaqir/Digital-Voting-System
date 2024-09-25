@@ -4,9 +4,10 @@ from app.basemodels import Voter
 from cassandra.query import SimpleStatement
 from uuid import UUID, uuid4
 
-router = APIRouter()
+router = APIRouter(tags=["Voters"])
 
-@router.post("/", response_model=UUID)
+
+@router.post("/", response_model=UUID, description="Creates a new voter and returns the unique voter ID.")
 def create_voter(voter: Voter):
     voter_id = uuid4()
     query = SimpleStatement("""
@@ -16,7 +17,7 @@ def create_voter(voter: Voter):
     session.execute(query, (voter_id, voter.name, voter.address, voter.birth_date, voter.registered_date))
     return voter_id
 
-@router.get("/{voter_id}", response_model=Voter)
+@router.get("/{voter_id}", response_model=Voter, description="Retrieves a voter by their unique ID.")
 def get_voter(voter_id: UUID):
     query = SimpleStatement("SELECT * FROM voters WHERE voter_id = %s")
     result = session.execute(query, (voter_id,)).one()
@@ -31,7 +32,7 @@ def get_voter(voter_id: UUID):
         registered_date=result.registered_date
     )
 
-@router.put("/{voter_id}", response_model=Voter)
+@router.put("/{voter_id}", response_model=Voter, description="Updates a voter's details and returns the updated voter.")
 def update_voter(voter_id: UUID, voter: Voter):
     query = SimpleStatement("""
         UPDATE voters
@@ -42,13 +43,13 @@ def update_voter(voter_id: UUID, voter: Voter):
     
     return voter
 
-@router.delete("/{voter_id}")
+@router.delete("/{voter_id}", description="Deletes a voter by their unique ID.")
 def delete_voter(voter_id: UUID):
     query = SimpleStatement("DELETE FROM voters WHERE voter_id = %s")
     session.execute(query, (voter_id,))
     return {"message": "Voter deleted successfully"}
 
-@router.get("/")
+@router.get("/", response_model=list[Voter], description="Retrieves a list of all voters.")
 def get_all_voters():
     query = SimpleStatement("SELECT * FROM voters")
     result = session.execute(query)
