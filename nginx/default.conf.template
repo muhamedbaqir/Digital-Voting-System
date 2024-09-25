@@ -1,5 +1,7 @@
     upstream fastapiservers {
-        server fastapi_app:${SERVER_PORT};
+        server ${SERVER_HOST_1}:${SERVER_PORT_1};
+        server ${SERVER_HOST_2}:${SERVER_PORT_2};
+        server ${SERVER_HOST_3}:${SERVER_PORT_3};
     }
     
     server {
