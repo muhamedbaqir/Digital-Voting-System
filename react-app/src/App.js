@@ -1,14 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
-import Home from "./components/Home";
-import Authenticate from "./components/Authenticate";
-import Vote from "./components/Vote";
-import Success from "./components/Success";
-import Admin from "./components/Admin";
-import AdminDashboard from "./components/AdminDashboard";
-import AdminLogin from "./components/AdminLogin";
-import TestingPage from "./components/TestingPage";
+import Home from "./pages/Home";
+import Authenticate from "./pages/Authenticate";
+import Vote from "./pages/Vote";
+import Success from "./pages/Success";
+import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
+import TestingPage from "./pages/TestingPage";
+
+import AddConstituencies from "./pages/StartElection/AddConstituencies";
+import AddConstituencyCandidates from "./pages/StartElection/AddConstituencyCandidates";
+import AddConstituencyParties from "./pages/StartElection/AddConstituencyParties";
+import AddFederalParties from "./pages/StartElection/AddFederalParties";
 
 function App() {
   return (
@@ -22,6 +27,23 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/test" element={<TestingPage />} />
+
+        <Route
+          path="/admin/AddConstituencies"
+          element={<AddConstituencies />}
+        />
+        <Route
+          path="/admin/AddConstituencyCandidates"
+          element={<AddConstituencyCandidates />}
+        />
+        <Route
+          path="/admin/AddConstituencyParties"
+          element={<AddConstituencyParties />}
+        />
+        <Route
+          path="/admin/AddFederalParties"
+          element={<AddFederalParties />}
+        />
       </Routes>
     </Router>
   );
