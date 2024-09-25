@@ -50,8 +50,8 @@ services:
       CASSANDRA_HOST: cassandra
     volumes:
       - ./backend:/backend
-    expose:
-      - ${SERVER_PORT}
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
 
   react:
     image: react-app

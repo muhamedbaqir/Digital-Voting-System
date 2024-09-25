@@ -32,19 +32,84 @@ const displayConstituencyParties = (constituencyParties, handleDelete) => {
   );
 };
 
+async function postConstituencyParties(constituencyParty) {
+  const url = "http://localhost:8000/constituency_parties"; // Replace with your endpoint
+
+  // Extract the necessary properties from the constituency party object
+  const {
+    id: constituencyPartyId,
+    constituency_id,
+    parties,
+  } = constituencyParty;
+
+  for (const party of parties) {
+    // Construct the object to be posted for each party
+    const partyData = {
+      constituency_party_id: constituencyPartyId,
+      constituency_id: constituency_id,
+      name: party,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: JSON.stringify(partyData), // Convert to JSON string
+      });
+
+      // Check if the response is ok (status code 200-299)
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const responseData = await response.json(); // Assuming the server returns JSON
+      console.log(`Successfully posted:`, responseData);
+    } catch (error) {
+      console.error(`Failed to post ${party}:`, error);
+    }
+  }
+}
+
 export default function AddConstituencyParties() {
   const navigate = useNavigate();
   const [constituencyParties, setConstituencyParties] = useState([
-    { name: "berlin", parties: ["spd"] },
-    { name: "münchen", parties: ["csu", "afd"] },
+    //{ name: "berlin", parties: ["spd"] },
+    //{ name: "münchen", parties: ["csu", "afd"] },
   ]);
-
-  useEffect(() => {}, [constituencyParties]);
-
+  const [constituencies, setConstituencies] = useState();
   const [searchResult, setSearchResult] = useState("");
-  const [selectedConstituency, setSelectedConstituency] = useState(
-    constituencyParties[0].name
-  );
+  const [selectedConstituency, setSelectedConstituency] = useState("");
+
+  useEffect(() => {
+    if (constituencies == undefined) {
+      let url = "http://localhost:8000/constituencies";
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => setConstituencies(data))
+        .catch((error) => console.log(error));
+    }
+  }, [constituencies]);
+
+  useEffect(() => {
+    if (constituencies != undefined) {
+      console.log(constituencies);
+      let newConstituencyParties = [];
+      for (const c of constituencies) {
+        newConstituencyParties.push({
+          constituency_id: c.constituency_id,
+          name: c.name,
+          parties: [],
+        });
+      }
+      setConstituencyParties(newConstituencyParties);
+      if (newConstituencyParties.length != 0) {
+        setSelectedConstituency(newConstituencyParties[0]);
+      }
+    }
+  }, [constituencies]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let index = constituencyParties.findIndex(
@@ -107,7 +172,10 @@ export default function AddConstituencyParties() {
             navigate("/admin/AddConstituencies");
           },
           () => {
-            navigate("/admin/AddConstituencyCandidates");
+            for (const party of constituencyParties) {
+              postConstituencyParties(party);
+            }
+            //navigate("/admin/AddConstituencyCandidates");
           },
           "Previous",
           "Next"

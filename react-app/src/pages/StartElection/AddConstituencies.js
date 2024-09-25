@@ -2,13 +2,39 @@ import { useNavigate } from "react-router-dom";
 import PrevNextButtonBar from "../../components/PrevNextButtonBar";
 import { useEffect, useState } from "react";
 
+async function postConstituencies(constituencies) {
+  const url = "http://localhost:8000/constituencies"; // Endpoint to which we'll post the data
+
+  for (const constituency of constituencies) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Indicate we're sending JSON
+        },
+        body: JSON.stringify({ name: constituency }), // Sending constituency as JSON
+      });
+
+      // Check if the response is ok (status code 200-299)
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json(); // Assuming the server returns JSON
+      console.log(`Successfully posted: ${constituency}`, data);
+    } catch (error) {
+      console.error(`Failed to post ${constituency}:`, error);
+    }
+  }
+}
+
 export default function AddConstituencies() {
   const navigate = useNavigate();
   const [constituencies, setConstituencies] = useState([]);
   const [searchResult, setSearchResult] = useState("");
 
   useEffect(() => {
-    let url = "http://localhost:9999/";
+    let url = "http://localhost:8000/";
     fetch(url)
       .then((res) => res.json())
       .then((data) => console.log(data))
@@ -24,6 +50,9 @@ export default function AddConstituencies() {
     setConstituencies([...constituencies, searchResult]);
     setSearchResult("");
   };
+
+  const handleNext = () => {};
+
   const handleDelete = (e) => {
     setConstituencies(constituencies.filter((it) => it != e));
   };
@@ -71,6 +100,7 @@ export default function AddConstituencies() {
             navigate("/admin/dashboard");
           },
           () => {
+            postConstituencies(constituencies);
             navigate("/admin/AddConstituencyParties");
           },
           "Abort",
