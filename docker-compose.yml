@@ -1,7 +1,7 @@
 services:
-  cassandra:
+  cassandra1:
     image: cassandra:4.1.0
-    container_name: cassandra
+    container_name: cassandra1
     environment:
       - "MAX_HEAP_SIZE=256M"
       - "HEAP_NEWSIZE=128M"
@@ -12,7 +12,34 @@ services:
       - CASSANDRA_PASSWORD=password
     restart: always
     volumes:
-      - ./out/cassandra_data:/var/lib/cassandra
+      - ./out/cassandra_data1:/var/lib/cassandra
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "cqlsh",
+          "-u cassandra",
+          "-p cassandra",
+          "-e describe keyspaces",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      
+  cassandra2:
+    image: cassandra:4.1.0
+    container_name: cassandra2
+    environment:
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+      - "CASSANDRA_CLUSTER_NAME=DVS"
+      - CASSANDRA_AUTHENTICATOR=PasswordAuthenticator
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=password
+    restart: always
+    volumes:
+      - ./out/cassandra_data2:/var/lib/cassandra
     healthcheck:
       test:
         [
