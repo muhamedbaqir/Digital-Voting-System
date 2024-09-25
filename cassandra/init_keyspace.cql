@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS candidates (
     constituency_party_id UUID
 );
 
+CREATE INDEX IF NOT EXISTS ON candidates(constituency_party_id);
+
 CREATE TABLE IF NOT EXISTS constituencies (
     constituency_id UUID PRIMARY KEY,
     name text,
@@ -30,6 +32,8 @@ CREATE TABLE IF NOT EXISTS constituency_parties (
     constituency_id UUID,
     name text
 );
+
+CREATE INDEX IF NOT EXISTS ON constituency_parties(constituency_id);
 
 CREATE TABLE IF NOT EXISTS parties (
     party_id UUID PRIMARY KEY,
