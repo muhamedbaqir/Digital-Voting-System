@@ -17,7 +17,7 @@ export default function ConfirmElectionStart() {
             navigate("/admin/dashboard");
           },
           "Previous",
-          "Next"
+          "Start Election"
         )}
       </div>
     </>
