@@ -14,7 +14,6 @@ import AddConstituencies from "./pages/StartElection/AddConstituencies";
 import AddConstituencyCandidates from "./pages/StartElection/AddConstituencyCandidates";
 import AddConstituencyParties from "./pages/StartElection/AddConstituencyParties";
 import AddFederalParties from "./pages/StartElection/AddFederalParties";
-import ConfirmElectionStart from "./pages/StartElection/ConfirmElectionStart";
 
 function App() {
   return (
@@ -44,10 +43,6 @@ function App() {
         <Route
           path="/admin/AddFederalParties"
           element={<AddFederalParties />}
-        />
-        <Route
-          path="/admin/ConfirmElectionStart"
-          element={<ConfirmElectionStart />}
         />
       </Routes>
     </Router>

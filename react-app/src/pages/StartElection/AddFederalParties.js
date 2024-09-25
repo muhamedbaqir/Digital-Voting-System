@@ -56,16 +56,15 @@ export default function AddFederalParties() {
         ))}
       </ul>
       <div className="fixed-bottom">
-        {" "}
         {PrevNextButtonBar(
           () => {
             navigate("/admin/AddConstituencyCandidates");
           },
           () => {
-            navigate("/admin/ConfirmElectionStart");
+            navigate("/admin/dashboard");
           },
           "Previous",
-          "Next"
+          "Start Election"
         )}
       </div>
     </>

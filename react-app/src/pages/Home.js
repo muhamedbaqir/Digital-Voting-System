@@ -67,11 +67,10 @@ export default function Home() {
             </p>
             <p class="mb-3">
               The first vote (Erststimme) is used to choose a candidate from
-              your local constituency. Germany is divided into 299
-              constituencies, and you vote for the candidate you want to
-              represent your local area in the Bundestag (federal parliament).
-              The candidate with the most votes in each constituency wins a seat
-              in the Bundestag.
+              your local constituency. Germany is divided into constituencies,
+              and you vote for the candidate you want to represent your local
+              area in the Bundestag (federal parliament). The candidate with the
+              most votes in each constituency wins a seat in the Bundestag.
             </p>
             <p class="mb-3">
               The second vote (Zweitstimme) is for a political party. This vote
