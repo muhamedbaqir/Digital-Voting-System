@@ -49,14 +49,14 @@ export default function AddConstituencyCandidates() {
   const navigate = useNavigate();
   const [constituencyCandidates, setConstituencyCandidates] = useState([
     {
-      name: "berlin",
+      constituency: "berlin",
       candidates: [
         new Candidate("tom", "tomson", "afd"),
         new Candidate("lisa", "lison", "csu"),
       ],
     },
     {
-      name: "münchen",
+      constituency: "münchen",
       candidates: [
         new Candidate("timmy", "foo", "haha"),
         new Candidate("a", "f", "d"),
@@ -71,14 +71,14 @@ export default function AddConstituencyCandidates() {
   const [candidateFirstName, setCandidateFirstName] = useState("");
   const [candidateLastName, setCandidateLastName] = useState("");
   const [selectedConstituency, setSelectedConstituency] = useState(
-    constituencyCandidates[0].name
+    constituencyCandidates[0].constituency
   );
   const [selectedParty, setSelectedParty] = useState(parties[0]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let index = constituencyCandidates.findIndex(
-      (it) => it.name == selectedConstituency
+      (it) => it.constituency == selectedConstituency
     );
     let tempCandidates = constituencyCandidates[index].candidates;
     if (
@@ -89,6 +89,7 @@ export default function AddConstituencyCandidates() {
       alert("Candidate is null or already exists");
       return;
     }
+
     tempCandidates = [...tempCandidates, candidateFirstName];
     let tempConstituencies = [...constituencyCandidates];
     tempConstituencies[index].candidates = tempCandidates;
@@ -99,7 +100,7 @@ export default function AddConstituencyCandidates() {
 
   const handleDelete = (constituencyName, party) => {
     let constituencyIndex = constituencyCandidates.findIndex(
-      (it) => it.name == constituencyName
+      (it) => it.constituency == constituencyName
     );
     let tempParties = [...constituencyCandidates[constituencyIndex].candidates];
     tempParties = tempParties.filter((it) => it != party);
@@ -119,7 +120,7 @@ export default function AddConstituencyCandidates() {
           onChange={(e) => setSelectedConstituency(e.target.value)}
         >
           {constituencyCandidates.map((it) => (
-            <option value={it.name}>{it.name}</option>
+            <option value={it.constituency}>{it.constituency}</option>
           ))}
         </select>
         <select
