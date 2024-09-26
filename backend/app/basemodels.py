@@ -21,13 +21,6 @@ class Constituency_Party(BaseModel):
     constituency_id: UUID
     name: str
 
-class Voter(BaseModel):
-    voter_id: Optional[UUID] = None
-    name: str
-    address: str
-    birth_date: date
-    registered_date: datetime
-
 class Vote(BaseModel):
     vote_id: Optional[UUID] = None
     party_id: UUID

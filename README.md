@@ -1,6 +1,13 @@
 # Digital-Voting-System
 Decentralized digital voting system
 
+# Before Starting
+create a .env-file from example.env
+
+# To Start
+docker-compose up --scale fastapi_app=2 --build
+for 2 fastapi container
+
 # Documenation
 All Documentation regarding this project will be in its corresponding wiki.
 

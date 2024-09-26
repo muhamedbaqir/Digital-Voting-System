@@ -6,10 +6,6 @@ services:
       - "MAX_HEAP_SIZE=256M"
       - "HEAP_NEWSIZE=128M"
       - "CASSANDRA_CLUSTER_NAME=DVS"
-      - CASSANDRA_AUTHENTICATOR=PasswordAuthenticator
-      - CASSANDRA_USER=cassandra
-      - CASSANDRA_PASSWORD_SEEDER=yes
-      - CASSANDRA_PASSWORD=password
     restart: always
     volumes:
       - ./out/cassandra_data:/var/lib/cassandra
@@ -38,13 +34,14 @@ services:
 
   fastapi_app:
     image: fastapi_app
-    build:
+    build: 
       context: ./backend
       dockerfile: Dockerfile
     depends_on:
       cassandra:
         condition: service_healthy
     restart: always
+    env_file: .env
     environment:
       SERVER_PORT: ${SERVER_PORT}
       CASSANDRA_HOST: cassandra
