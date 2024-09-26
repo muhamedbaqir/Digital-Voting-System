@@ -6,6 +6,7 @@
 \usepackage{graphicx} % Allows inclusion of images (optional)
 
 \parindent 0mm
+\linespread{1.25}
 
 \title{Digitales Wahlsystem}
 \author{
@@ -17,6 +18,8 @@
 \date{\today}  % Can be \today for today's date for a specific date
 
 \begin{document}
+\pagenumbering{roman}
+
 \maketitle
 \newpage
 
@@ -38,11 +41,13 @@ Dieses Paper befasst sich mit der Planung und Implementation eines Wahlsystems, 
 \newpage
 
 \section{Ablauf einer Bundestagswahl}
-Der analoge Ablauf einer Bundestagswahl ist gesetzlich definiert und erlaubt unserem digitalem Wahlsystem keinerlei Abweichung. Folgendes Diagramm beschreibt (vereinfacht) den Prozess, den wir digitalisieren wollen. \\
+Der analoge Ablauf einer Bundestagswahl ist gesetzlich definiert und erlaubt unserem digitalem Wahlsystem keinen Spielraum. Folgendes Diagramm beschreibt (vereinfacht) den Prozess, den wir digitalisieren wollen. \\
 
-festlegung der wahlkreise -> festlegung der kandidaten für einen wahlkreis -> festlegung der parteien für den bundestag -> beginn der wahl -> Wähler autentifiziert sich -> Wähler gibt stimme ab -> ablauf der wahlperiode -> auswertung der stimmen -> ausgabe der ergebnisse
-
-/* Diagramm */ 
+\begin{figure}[h] % 'h' means place the figure here
+    \centering % Center the image
+    \includegraphics[width=0.8\textwidth]{election_process} % Adjust width to 50% of text width
+    \label{fig:example} % Add a label for referencing
+\end{figure}
 
 Aus dem Ablauf der Wahl kristallisieren die wichtigsten Anforderungen: \\
 \begin{itemize}
@@ -67,22 +72,65 @@ Desweiteren brauchen wir mehrere Backend Intanzen, welche mit der verteilten Dat
 An dieser Stelle würde üblicherweise erst die Architektur eruiert werden, anstatt auf eine konkrete Technologie einzugehen. \\
 Jedoch sind die eben ermittelten Anforderungen so passend, dass es nur Sinn ergibt die Auswahl der Datenbanktechnologie, nämlich Cassandra, zu erklären.\\
 
-Cassandra ist ein verteilter nicht-relationaler Column Store, welcher aus den folgenden Gründen die beste Lösung für den Use-Case unserer Bundestagswahl ist.
+Cassandra ist ein verteilter nicht-relationaler Column Store, welcher aus den folgenden Gründen die beste Lösung für den Use-Case unserer Bundestagswahl ist.\\
 
-    \begin{tabular}{ c | c }
+    \begin{tabular}{  p{0.3\linewidth} | p{0.8\linewidth} }
         Anforderung & Cassandra Funktion\\ 
         \hline
-     Schreibgeschwindigkeit \& Eventuelle Konsistenz& cell5  \\  
-      Ausfallsicherheit und Verfügbarkeit& cell8 \\
-      Partitionierung & foo \\   
+     Schreibgeschwindigkeit 
+        
+     Eventuelle Konsistenz& Cassandra schreibt einen Insert nicht direkt auf die Festplatte, sondern schreibt ihn erst in den Hauptspeicher und inseriert ihn zum nächstmöglichen Zeitpunkt.
+
+     \vspace{1em}
+
+     Dies ist möglich durch die nicht-relationale Struktur, denn ein Insert über viele normalisierte Tabellen hinweg würde nur in ständigen Hardlocks resultieren.  
+     
+     \vspace{1em}
+     Die Verzögerung bis zum Ausführen der Operationen im Hauptspeicher ist eben die eventuelle Konsistenz, welche für uns bedeutet, dass wir sehr viele Schreiboperationen abhandeln können.
+     vgl. \cite{storage-engine}\\ 
+
+     \hline
+     Redundanz 
+          
+     Verfügbarkeit& 
+     
+      
+    Cassandra bildet ein Cluster aus beliebig vielen Nodes, welche die Daten redundant speichern, zu einem frei wählbaren Duplizierungsgrad 
+    
+    \vspace{1em}
+
+    Des Weiteren kann Cassandra dynamisch mit dem Hinzufügen und Entfernen von Nodes umgehen, ohne dass die Verfügbarkeit darunter leidet.
+
+    Die Daten werden entsprechend dem Duplizierungsgrad auf die Nodes verteilt.
+    
+    \vspace{1em}
+    
+    Diese zwei Punkte bedeuten also, dass Cassandra die Daten hochverfügbar und dupliziert für unser Wahlsystem speichern kann.
+    vgl. \cite{overview}
+    \\
+
+      \hline
+      Partitionierung & 
+      
+      Alle Cassandra Nodes bilden einen Keyspace, vereinfacht gesagt eine logische Datenbank mit über allen Nodes gleichen Tabellen. 
+
+      Für unser System ist das aufgrund der schwer möglichen Datenpartitionierung optimal.
+      \cite{overview}
+      \\   
     \end{tabular}
+    \\
+    Cassandra entspricht also unseren Ansprüchen an die Datenspeicherung und ist daher die Datenbanktechnologie unserer Wahl.
 \newpage
 \section{Architektur}
 Wir entschieden Cassandra zur Datenspeicherung und Zustandsspeicherung zu benutzen, und dementsprechend richten wir den Rest des Wahlsystems danach. \\
 Um horizontale Skalierbarkeit, hohe Verfügbarkeit und Ausfallsicherheit zu erreichen, gestalten wir unser Wahlsystem wie folgt: \\
 
-diagramm architektur
-client <-> nginx <-> backends <-> cassandra cluster
+\begin{figure}[h] % 'h' means place the figure here
+    \centering % Center the image
+    \includegraphics[width=0.8\textwidth]{architecture} % Adjust width to 50% of text width
+    \caption{An example image.} % Add a caption
+    \label{fig:example} % Add a label for referencing
+\end{figure}
 
 Das Herzstück der Anwendung sind die beliebig vielen Backends, welche alle über unseren Loadbalancer zugänglich sind. \\
 Das Frontend zählt zu den statischen Inhalten und wird ebenso vom Loadbalancer ausgegeben.
@@ -100,11 +148,51 @@ Als nächstes werden wir diese Architektur implementieren und somit unser digita
 
 \newpage
 \section{Implementation}
+Wir organisierten das Backend, Frontend, Nginx und Cassandra in Docker Containern, welche wir mithilfe von Docker Compose orchestrierten.
+
 \subsection{Docker Compose}
-\subsection{Nginx Loadbalancer}
+Docker Compose ermöglicht es zum einen mehrere Container auf einmal zu starten und stoppen, was den Entwicklungsprozess drastisch vereinfacht.
+
+In der Docker Compose Konfigurationsdatei definieren wir folgende Dienste:
+\begin{itemize}
+    \item fastapi{\_}app: Unser Backend, welches REST APIs zur Datenmanipulation bereitstellt
+    \item react: Unser React Web Frontend
+    \item nginx: Unser Loadbalancer für die beliebig vielen fastapi{\_}app Instanzen
+    \item cassandra: Unsere Cassandra Instanz
+    \item cassandra{\_}load{\_}keyspace: Ein Hilfs-Container, um Cassandra zu initialisieren.
+\end{itemize}
+
 \subsection{FastApi Backend}
+Das Backend ist zustandslos und bietet dem Client REST APIs an, mit denen es die Daten in Cassandra manipuliert.
+
+Mithilfe des \textit{--scale fastapi{\_}app=N} Parameters für \textit{docker compose up}, können \textit{N} Instanzen erstellt werden.
+
+\subsection{Nginx Loadbalancer}
+Da wir beliebig viele Backend Instanzen haben können, brauchen wir Nginx um den eingehenden Netzverkehr zwischen den Instanzen aufteilen zu können.
+
+In Docker Compose geschieht das innerhalb des Docker Compose internen DNS Netzes, in welchem Container mit dem Service-Namen angesprochen werden können.
+
+
 \subsection{React Frontend}
+
+Das React Frontend zählt zu den statischen Inhalten unserer Inhalte und wird von einem NodeJS Container ausgeliefert.
 \newpage
 
+\section{Resultat}
+Wir haben es geschafft, alle Komponenten separat aufzuziehen. Jedoch scheiterte es beim Integrieren an Netzwerkproblemen (primär CORS und DNS Auflösung). 
+Diese Probleme konnten wir nicht im Zeitrahmen des Projektes beheben, wodurch das Frontend nicht mit dem Backend kommuniziert, sondern nur Daten zu Debug-Zwecken ausgibt.\\
+
+Dennoch ändert dies nichts an der fundierten Architektur, welche horizontal skalierbar und ausfallsicher ist, und unsere Daten sicher dupliziert und verwaltet.
+
+\newpage
+\begin{thebibliography}{20} % The number indicates the widest label (e.g., 9 for single-digit references)
+    \bibitem{storage-engine}
+    Cassandra Documentation, \textit{Storage Engine}, https://cassandra.apache.org/doc/latest/cassandra/architecture/storage-engine.html, 26,09,2024.
+
+    \bibitem{overview}
+    Cassandra Documentation, \textit{Overview}, https://cassandra.apache.org/doc/latest/cassandra/architecture/overview.html, 26,09,2024.
+
+    
+\end{thebibliography}
 
 \end{document}
