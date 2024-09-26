@@ -1,3 +1,4 @@
+
 \documentclass{article}  % Document class (can be article, report, book, etc.)
 
 % Preamble: add packages here (optional)
@@ -11,7 +12,7 @@
 \author{
     Muhamedbaqir Al-Rumeil \and 
     Tizian Grossmann \and 
-    Leon Meier
+    Leon Maier
     }
 
 \date{\today}  % Can be \today for today's date for a specific date
@@ -27,12 +28,7 @@
 \section{Anforderungen an verteilte Systeme}
 
 Heutzutage werden viele Softwarelösungen nach einer verteilten Architektur gerichtet, um Use-Case spezifische Anforderungen besser (oder überhaupt) erfüllen zu können. \\
-Die Anforderungen an eine Lösung und die Herausforderungen einer möglichen verteilten Architektur sind immer spezifisch, zur Illustrierung jedoch folgende Beispiele: 
-\begin{itemize}
-    \item Geringe Latenzen: Physikalische Beschränkungen sind fix und dementsprechend muss verhindert werden, dass Nachrichten länger im Netzwerk unterwegs sind, als es die Anwendung erlaubt.
-
-    \item Ausfallsicherheit: Genauso wie man nicht alles auf eine Karte setzen sollte, ist es umso weniger sinnvoll kritische Anwendungen von einem physikalischem Computer abhängig zu machen. Computersysteme können und werden aus den beliebigsten Gründen ausfallen.
-\end{itemize} 
+Die Anforderungen an eine Lösung und die Herausforderungen einer möglichen verteilten Architektur sind immer spezifisch, mögliche Anforderungen wären: Ausfallsicherheit, geringe Latenzen, Datenredundanz, etc.  \\
 
 Es ist wichtig zu erkennen, dass die Architektur nicht willkürlich alle möglichen Ziele erfüllen kann, sondern sich nach dem zugrunde liegenden Problem richten sollte. In einem ERP-System hat die Latenz beispielsweise nicht den selben Stellenwert wie in einem autonomen Fahrsystem. \\
 Es bedarf also immer einer gründlichen Analyse der Anforderungen, um die Architektur sinnvoll umsetzen zu können. \\
@@ -45,34 +41,72 @@ Dieses Paper befasst sich mit der Planung und Implementation eines Wahlsystems, 
 \section{Ablauf einer Bundestagswahl}
 Der analoge Ablauf einer Bundestagswahl ist gesetzlich definiert und erlaubt unserem digitalem Wahlsystem keinerlei Abweichung. Folgendes Diagramm beschreibt (vereinfacht) den Prozess, den wir digitalisieren wollen. \\
 
-festlegung der wahlkreise -> festlegung der kandidaten für einen wahlkreis -> festlegung der parteien für den bundestag -> beginn der wahl -> Wähler autentifiziert sich -> Wähler gibt stimme ab -> ablauf der wahlperiode -> auswertung der stimmen -> ausgabe der ergebnisse
-
-/* Diagramm */ 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{Wahlablauf.png}
+    \caption{Der typische Ablauf einer Wahl des deutschen Bundestages}
+\end{figure} 
 
 Aus dem Ablauf der Wahl kristallisieren die wichtigsten Anforderungen: \\
 \begin{itemize}
-    \item Schnelle Schreibgeschwindigkeiten: Die größte Last auf die Datenbank(en) wird das Einfügen der Stimmen sein. Die Leseoperationen (Kandidaten, Parteien, Wahlkreise) sind während der Wahl statisch und das Auswerten (ebenfalls eine Leseoperation) geschieht nur einmalig zum Ende einer Wahl. 
+    \item Viele Schreiboperationen: Die größte Last auf die Datenbank(en) wird das Einfügen der Stimmen sein. Die Leseoperationen (Kandidaten, Parteien, Wahlkreise) sind während der Wahl statisch und das Auswerten (ebenfalls eine Leseoperation) geschieht nur einmalig zum Ende einer Wahl. 
 
-    \item Schutz vor Datenverlust: Es dürfen unter keinen Umständen Wählerstimmen verloren gehen, daher müssen diese repliziert werden.
+    \item Eventuelle Konsistenz: Die Stimmen werden erst alle gesammelt und im Anschluss ausgewertet. Es reicht also aus Schreiboperationen vorzumerken, anstatt direkt auszuführen. \\ Erst, wenn die Stimmen ausgewertet werden sollen, muss der Zustand der eventuellen Konsistenz eintreten.
 
-    \item Datenintegrität: Da ein Wähler nicht mehrmals wählen darf, kann die Datenstruktur nicht nach Wahlkreis, Partei oder Kandidaten partitioniert sein, da dies bei vielen Schreiboperationen die Leistung drastisch reduzieren würde. Wären die Daten partitioniert, müsste man bei jeder Schreiboperation jede Partition abfragen, ob der vorliegende Eintrag gültig ist oder nicht.
+    \item Ausfallsicherheit: Wie anfangs festgelegt, muss das System ausfallsicher sein und keinen einzigen Ausfallpunkt besitzen dürfen. Die Wählerstimmen dürfen also nicht an einem einzigen Ort gespeichert sein, und es darf nicht über eine einzige Instanz mit den Daten interagiert werden. \\
+    Wir brauchen also ein redundantes und ständig verfügbares System.
 
-    \item Ausfallsicherheit: Wie anfangs festgelegt, muss das System ausfallsicher sein und keinen einzigen Ausfallpunkt besitzen dürfen. Die Wählerstimmen dürfen also nicht an einem einzigen Ort gespeichert sein, und es darf nicht über eine einzige Instanz mit den Daten interagiert werden.
+
+    \item Partitionierung: Da ein Wähler nicht mehrmals wählen darf, kann die Datenstruktur nicht nach Wahlkreis, Partei oder Kandidaten partitioniert sein, da dies bei vielen Schreiboperationen die Leistung drastisch reduzieren würde (aufgrund von Locks). Wären die Daten partitioniert, müsste man bei jeder Schreiboperation jede Partition abfragen, ob der vorliegende Eintrag gültig ist oder nicht. \\ Desweiteren bräuchte es für jede Partition mehrere Instanzen, welche die Daten redundant speichern, diese Daten müssten ebenfalls synchronisiert werden und man bräuchte eine weitere Instanz zur Lastverteilung und Verwaltung der Partitionsinstanzen. Alles in allem also ein sehr großer Aufwand.
+
  
 \end{itemize} 
 
 Wir fassen also zusammen, dass wir eine verteilte Datenbank brauchen, welche schnelle Schreibgeschwindigkeiten unterstützt und die Daten nicht partitioniert werden. \\
 Desweiteren brauchen wir mehrere Backend Intanzen, welche mit der verteilten Datenbank interagieren. \\
 
-Im folgenden Kapitel wird die daraus entstehende Architektur näher beleuchtet.
+\newpage
+\section{Cassandra}
+An dieser Stelle würde üblicherweise erst die Architektur eruiert werden, anstatt auf eine konkrete Technologie einzugehen. \\
+Jedoch sind die eben ermittelten Anforderungen so passend, dass es nur Sinn ergibt die Auswahl der Datenbanktechnologie, nämlich Cassandra, zu erklären.\\
 
+Cassandra ist ein verteilter nicht-relationaler Column Store, welcher aus den folgenden Gründen die beste Lösung für den Use-Case unserer Bundestagswahl ist.
+
+    \begin{tabular}{ c | c }
+        Anforderung & Cassandra Funktion\\ 
+        \hline
+     Schreibgeschwindigkeit \& Eventuelle Konsistenz& cell5  \\  
+      Ausfallsicherheit und Verfügbarkeit& cell8 \\
+      Partitionierung & foo \\   
+    \end{tabular}
 \newpage
 \section{Architektur}
+Wir entschieden Cassandra zur Datenspeicherung und Zustandsspeicherung zu benutzen, und dementsprechend richten wir den Rest des Wahlsystems danach. \\
+Um horizontale Skalierbarkeit, hohe Verfügbarkeit und Ausfallsicherheit zu erreichen, gestalten wir unser Wahlsystem wie folgt: \\
+
+diagramm architektur
+client <-> nginx <-> backends <-> cassandra cluster
+
+Das Herzstück der Anwendung sind die beliebig vielen Backends, welche alle über unseren Loadbalancer zugänglich sind. \\
+Das Frontend zählt zu den statischen Inhalten und wird ebenso vom Loadbalancer ausgegeben.
+
+In dieser Konstellation fällt auf, dass: \\
+\begin{itemize}
+    \item Durch die beliebig vielen Backends ist horizontale Skalierbarkeit erfüllt
+    \item Wenn ein Backend ausfällt, dann sind die anderen noch funktional. (Hohe Verfügbarkeit)
+    \item Der Loadbalancer stellt einen einzigen Ausfallpunkt dar, für den Rahmen des Projekts wird dies als Risiko in Kauf genommen.
+\end{itemize}
+
+Als nächstes werden wir diese Architektur implementieren und somit unser digitales Wahlsystem umsetzen.
 
 
 
 \newpage
 \section{Implementation}
+\subsection{Docker Compose}
+\subsection{Nginx Loadbalancer}
+\subsection{FastApi Backend}
+\subsection{React Frontend}
 \newpage
 
 
