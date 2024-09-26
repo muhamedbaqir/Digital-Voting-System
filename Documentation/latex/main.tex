@@ -27,12 +27,7 @@
 \section{Anforderungen an verteilte Systeme}
 
 Heutzutage werden viele Softwarelösungen nach einer verteilten Architektur gerichtet, um Use-Case spezifische Anforderungen besser (oder überhaupt) erfüllen zu können. \\
-Die Anforderungen an eine Lösung und die Herausforderungen einer möglichen verteilten Architektur sind immer spezifisch, zur Illustrierung jedoch folgende Beispiele: 
-\begin{itemize}
-    \item Geringe Latenzen: Physikalische Beschränkungen sind fix und dementsprechend muss verhindert werden, dass Nachrichten länger im Netzwerk unterwegs sind, als es die Anwendung erlaubt.
-
-    \item Ausfallsicherheit: Genauso wie man nicht alles auf eine Karte setzen sollte, ist es umso weniger sinnvoll kritische Anwendungen von einem physikalischem Computer abhängig zu machen. Computersysteme können und werden aus den beliebigsten Gründen ausfallen.
-\end{itemize} 
+Die Anforderungen an eine Lösung und die Herausforderungen einer möglichen verteilten Architektur sind immer spezifisch, mögliche Anforderungen wären: Ausfallsicherheit, geringe Latenzen, Datenredundanz, etc.
 
 Es ist wichtig zu erkennen, dass die Architektur nicht willkürlich alle möglichen Ziele erfüllen kann, sondern sich nach dem zugrunde liegenden Problem richten sollte. In einem ERP-System hat die Latenz beispielsweise nicht den selben Stellenwert wie in einem autonomen Fahrsystem. \\
 Es bedarf also immer einer gründlichen Analyse der Anforderungen, um die Architektur sinnvoll umsetzen zu können. \\
@@ -64,15 +59,20 @@ Aus dem Ablauf der Wahl kristallisieren die wichtigsten Anforderungen: \\
 Wir fassen also zusammen, dass wir eine verteilte Datenbank brauchen, welche schnelle Schreibgeschwindigkeiten unterstützt und die Daten nicht partitioniert werden. \\
 Desweiteren brauchen wir mehrere Backend Intanzen, welche mit der verteilten Datenbank interagieren. \\
 
-Im folgenden Kapitel wird die daraus entstehende Architektur näher beleuchtet.
+\newpage
+\section{Cassandra}
+Cassandra
 
 \newpage
 \section{Architektur}
-
+Architektur
 
 
 \newpage
 \section{Implementation}
+\subsection{Docker Compose}
+\subsection{FastApi Backend}
+\subsection{React Frontend}
 \newpage
 
 
